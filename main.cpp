@@ -21,8 +21,9 @@ struct Graph {
         int p;
         int m;
         bool path;
+        int path_distance;
 
-        Ve() : d(-1), p(-1), m(-1), path(false) {}
+        Ve() : d(-1), p(-1), m(-1), path(false), path_distance(-1) {}
     };
 
     struct M {
@@ -101,25 +102,18 @@ struct Graph {
                 // na wierzchołku do którego prowadzi krawędź znajduje się mrówka
                 if( g[ed->v].m != -1 ){
 
-                    // ustaw wierzchołki jako te które znajdują się na ścieżce
+                    // ustaw przebytą odległość na ścieżce
 
-                    int parent_on_path = parent;
-                    int child_on_path = ed->v;
+                    int ve_on_path = ed->v;
+                    int path_distance = 0;
 
-                    while(parent_on_path!=-1){
+                    while(ve_on_path!=-1){
+                        g[ve_on_path].path_distance = path_distance;
 
-                        if(!g[parent_on_path].path){
-                            g[parent_on_path].path = true;
-                        }
-                        else{
-                            m[g[ed->v].m].vt = child_on_path;
-                            break;
-                        }
-
-                        child_on_path = parent_on_path;
-                        parent_on_path = g[parent_on_path].p;
-
+                        path_distance++;
+                        ve_on_path = g[ve_on_path].p;
                     }
+
 
                 }
 
