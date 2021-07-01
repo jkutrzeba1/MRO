@@ -20,7 +20,6 @@ struct Graph {
         int d;
         int p;
         int m;
-        bool path;
         int path_distance;
 
         Ve() : d(-1), p(-1), m(-1), path(false), path_distance(-1) {}
