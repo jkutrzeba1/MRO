@@ -190,7 +190,7 @@ int main(){
         int v; //numer wierzchołka gdzie znajduje się mrówka
         cin>>v;
         g.m.push_back(Graph::M(v-1));
-        g[v-1].m = k-1;
+        g.g[v-1].m = x-1;
     }
 
     int l; // ilość lądowań biedronki
