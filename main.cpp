@@ -139,7 +139,7 @@ struct Graph {
                     if(ve_on_path==-1)
                         path_distance--;
 
-                    m[m].mov = path_distance;
+                    m[m_idx].mov = path_distance;
 
 
                 }
