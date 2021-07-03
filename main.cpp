@@ -123,7 +123,7 @@ struct Graph {
 
                             // skróć ściężkę o dystans mrówki która dotarła tam wcześniej
 
-                            path_distance = g[ve_on_path].path_distance;
+                            path_distance = g[ve_on_path].path_distance - 1;
 
                             break;
 
