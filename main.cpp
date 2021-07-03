@@ -90,6 +90,8 @@ struct Graph {
             distance = g[que[qs]].d + 1;
             parent = que[qs];
 
+
+
             for(auto ed = g[que[qs]].begin(); ed!=g[que[qs]].end(); ed++){
 
                 if( g[ed->v].d != -1 ){
@@ -121,7 +123,7 @@ struct Graph {
 
                             // skróć ściężkę o dystans mrówki która dotarła tam wcześniej
 
-                            path_distance-=g[ve_on_path].path_distance;
+                            path_distance = g[ve_on_path].path_distance;
 
                             break;
 
