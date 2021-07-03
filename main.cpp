@@ -21,15 +21,16 @@ struct Graph {
         int p;
         int m;
         int path_distance;
+        int m_on_path;
 
-        Ve() : d(-1), p(-1), m(-1), path(false), path_distance(-1) {}
+        Ve() : d(-1), p(-1), m(-1), path(false), path_distance(-1), m_on_path(-1) {}
     };
 
     struct M {
         int v; //indeks wierzchołka gdzie znajduje się mrówka
         int c; //ile razy mrówka przegoniła biedronkę
-        int vt; //indeks wierzchołka gdzie mrówka zakończy wędrówkę
-        M(int v) : v(v), c(0) {}
+        int mov; //odległość jaką pokona mrówka aby przegonić biedronkę
+        M(int v) : v(v), c(0), mov(0) {}
     };
 
     vector<Ve> g;
@@ -98,8 +99,12 @@ struct Graph {
                 g[ed->v].d = distance;
                 g[ed->v].p = parent;
 
+
                 // na wierzchołku do którego prowadzi krawędź znajduje się mrówka
-                if( g[ed->v].m != -1 ){
+
+                int m_idx = g[ed->v].m;
+
+                if( m_idx != -1 ){
 
                     // ustaw przebytą odległość na ścieżce
 
@@ -107,11 +112,32 @@ struct Graph {
                     int path_distance = 0;
 
                     while(ve_on_path!=-1){
+
+
+                        // jeśli wierzchołek jest odwiedzony przez mrówkę we wcześniejszym czasie i ścieżka nie została skrócona
+                        // ścieżki są skracane o dystans mrówki która dotarła tam wcześniej
+
+                        if(g[ve_on_path].path_distance && m[g[ve_on_path].m_on_path].mov >= g[ve_on_path].path_distance ){
+
+                            // skróć ściężkę o dystans mrówki która dotarła tam wcześniej
+
+                            path_distance-=g[ve_on_path].path_distance;
+
+                            break;
+
+                        }
+
                         g[ve_on_path].path_distance = path_distance;
+                        g[ve_on_path].m_on_path = m_idx;
 
                         path_distance++;
                         ve_on_path = g[ve_on_path].p;
                     }
+
+                    if(ve_on_path==-1)
+                        path_distance--;
+
+                    m[m].mov = path_distance;
 
 
                 }
