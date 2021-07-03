@@ -23,7 +23,7 @@ struct Graph {
         int path_distance;
         int m_on_path;
 
-        Ve() : d(-1), p(-1), m(-1), path(false), path_distance(-1), m_on_path(-1) {}
+        Ve() : d(-1), p(-1), m(-1), path_distance(-1), m_on_path(-1) {}
     };
 
     struct M {
