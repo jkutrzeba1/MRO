@@ -1,9 +1,8 @@
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
-
-
 
 struct Graph {
 
@@ -80,6 +79,7 @@ struct Graph {
         int parent;
 
         vector<int> que;
+        vector<int> ants;
 
         que.push_back(r);
 
@@ -90,27 +90,18 @@ struct Graph {
             distance = g[que[qs]].d + 1;
             parent = que[qs];
 
+            // bfs przetwarza wierzchołek na następnym poziomie
+            // zapisz odległość jaką mają pokonać mrówki na niższym poziomie
 
+            if(qs>0 && g[que[qs-1]].d < g[que[qs]].d  ){
 
-            for(auto ed = g[que[qs]].begin(); ed!=g[que[qs]].end(); ed++){
+                sort(ants.begin(); ants.end());
 
-                if( g[ed->v].d != -1 ){
-                    continue;
-                }
+                for(auto ant = ants.begin(); ant!=ants.end(); ant++){
 
-                g[ed->v].d = distance;
-                g[ed->v].p = parent;
+                    // zapisz przebytą odległość na ścieżce
 
-
-                // na wierzchołku do którego prowadzi krawędź znajduje się mrówka
-
-                int m_idx = g[ed->v].m;
-
-                if( m_idx != -1 ){
-
-                    // ustaw przebytą odległość na ścieżce
-
-                    int ve_on_path = ed->v;
+                    int ve_on_path = m[*ant].v;
                     int path_distance = 0;
 
                     while(ve_on_path!=-1){
@@ -130,7 +121,7 @@ struct Graph {
                         }
 
                         g[ve_on_path].path_distance = path_distance;
-                        g[ve_on_path].m_on_path = m_idx;
+                        g[ve_on_path].m_on_path = *ant;
 
                         path_distance++;
                         ve_on_path = g[ve_on_path].p;
@@ -139,8 +130,31 @@ struct Graph {
                     if(ve_on_path==-1)
                         path_distance--;
 
-                    m[m_idx].mov = path_distance;
+                    m[*ant].mov = path_distance;
 
+                }
+
+                ants.clear();
+
+            }
+
+            for(auto ed = g[que[qs]].begin(); ed!=g[que[qs]].end(); ed++){
+
+                if( g[ed->v].d != -1 ){
+                    continue;
+                }
+
+                g[ed->v].d = distance;
+                g[ed->v].p = parent;
+
+
+                // na wierzchołku do którego prowadzi krawędź znajduje się mrówka
+
+                int m_idx = g[ed->v].m;
+
+                if( m_idx != -1 ){
+
+                    ants.push_back(m_idx);
 
                 }
 
