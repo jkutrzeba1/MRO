@@ -98,7 +98,7 @@ struct Graph {
 
             if(qs>0 && g[que[qs-1]].d < g[que[qs]].d  ){
 
-                sort(ants.begin(); ants.end());
+                sort(ants.begin(), ants.end());
 
                 for(auto ant = ants.begin(); ant!=ants.end(); ant++){
 
