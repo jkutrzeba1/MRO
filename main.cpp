@@ -223,6 +223,25 @@ struct Graph {
         }
 
     }
+	
+	void ClearBfsMeta(){
+		
+		for(auto ant = m.begin(); ant!=m.end(); ant++){
+			
+			ant->mov = 0;
+			
+		}
+		
+		for(auto vertice = g.begin(); g!=m.end(); vertice++){
+			
+			vertice->m_on_path = -1;
+			vertice->path_distance = -1;
+			vertice->d = -1;
+			vertice->p = -1;
+			
+		}
+		
+	}
 
     void WriteBfs(){
 
@@ -269,7 +288,8 @@ int main(){
 
         g.Bfs(--n);
         g.AntMoves();
-
+		g.ClearBfsMeta();
+		
     }
 
 }
