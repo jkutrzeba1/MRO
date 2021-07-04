@@ -85,6 +85,8 @@ struct Graph {
 
         int qs = 0;
 
+        int shortest_distance = -1;
+
         while(qs<que.size()){
 
             distance = g[que[qs]].d + 1;
@@ -105,6 +107,13 @@ struct Graph {
                     int path_distance = 0;
 
                     while(ve_on_path!=-1){
+
+
+                        if(path_distance > shortest_distance){
+
+                            path_distance = shortest_distance-1;
+
+                        }
 
 
                         // jeśli wierzchołek jest odwiedzony przez mrówkę we wcześniejszym czasie i ścieżka nie została skrócona
@@ -155,6 +164,10 @@ struct Graph {
                 if( m_idx != -1 ){
 
                     ants.push_back(m_idx);
+
+                    if(shortest_distance==-1){
+                        shortest_distance = distance;
+                    }
 
                 }
 
