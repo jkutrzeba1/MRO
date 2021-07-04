@@ -109,9 +109,11 @@ struct Graph {
                     while(ve_on_path!=-1){
 
 
-                        if(path_distance > shortest_distance){
+                        if(path_distance == shortest_distance){
 
                             path_distance = shortest_distance-1;
+
+                            break;
 
                         }
 
