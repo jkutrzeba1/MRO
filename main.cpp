@@ -200,6 +200,30 @@ struct Graph {
 
     }
 
+    void AntMoves(){
+
+        for(auto ant = m.begin(); ant!=m.end(); ant++){
+
+            int m_idx = ant-m.begin();
+
+            int vertice_before_move_idx = ant->v;
+            int vertice_after_move_idx = ant->v;
+
+            for(int x=0; x < ant->mov; x++){
+
+                vertice_after_move_idx = g[vertice_after_move_idx].p;
+
+            }
+
+            ant->v = vertice_after_move_idx;
+
+            g[vertice_before_move_idx].m = -1;
+            g[vertice_after_move_idx].m = m_idx;
+
+        }
+
+    }
+
     void WriteBfs(){
 
         for(int x = 0; x<g.size(); x++){
@@ -244,6 +268,7 @@ int main(){
         cin>>n;
 
         g.Bfs(--n);
+        g.AntMoves();
 
     }
 
