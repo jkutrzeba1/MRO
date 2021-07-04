@@ -116,6 +116,8 @@ struct Graph {
 
                                 m_idx_first = *ant;
 
+                                m[m_idx_first].c++;
+
                                 path_distance = shortest_distance;
 
                                 break;
