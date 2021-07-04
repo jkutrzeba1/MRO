@@ -134,7 +134,7 @@ struct Graph {
                         // jeśli wierzchołek jest odwiedzony przez mrówkę we wcześniejszym czasie i ścieżka nie została skrócona
                         // ścieżki są skracane o dystans mrówki która dotarła tam wcześniej
 
-                        if(g[ve_on_path].path_distance && m[g[ve_on_path].m_on_path].mov >= g[ve_on_path].path_distance ){
+                        if(g[ve_on_path].path_distance != -1 && m[g[ve_on_path].m_on_path].mov >= g[ve_on_path].path_distance ){
 
                             // skróć ściężkę o dystans mrówki która dotarła tam wcześniej
 
@@ -232,7 +232,7 @@ struct Graph {
 			
 		}
 		
-		for(auto vertice = g.begin(); g!=m.end(); vertice++){
+		for(auto vertice = g.begin(); vertice!=g.end(); vertice++){
 			
 			vertice->m_on_path = -1;
 			vertice->path_distance = -1;
@@ -252,6 +252,17 @@ struct Graph {
         }
 
     }
+	
+	
+	void WriteAnts(){
+		
+		for(auto ant = m.begin(); ant!=m.end(); ant++){
+			
+			cout<<(ant->v)+1<<" "<<ant->c<<endl;
+			
+		}
+		
+	}
 
 };
 
@@ -291,5 +302,7 @@ int main(){
 		g.ClearBfsMeta();
 		
     }
+	
+	g.WriteAnts();
 
 }
