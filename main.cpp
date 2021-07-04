@@ -86,6 +86,7 @@ struct Graph {
         int qs = 0;
 
         int shortest_distance = -1;
+        int m_idx_first = -1;
 
         while(qs<que.size()){
 
@@ -110,6 +111,16 @@ struct Graph {
 
 
                         if(path_distance == shortest_distance){
+
+                            if(m_idx_first == -1){
+
+                                m_idx_first = *ant;
+
+                                path_distance = shortest_distance;
+
+                                break;
+
+                            }
 
                             path_distance = shortest_distance-1;
 
