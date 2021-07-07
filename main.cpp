@@ -34,6 +34,8 @@ struct Graph {
 
     vector<Ve> g;
     vector<M> m;
+	
+	vector<int> ants;
 
     Graph(int n = 0) : g(n) {}
 
@@ -79,7 +81,6 @@ struct Graph {
         int parent;
 
         vector<int> que;
-        vector<int> ants;
 
         que.push_back(r);
 
@@ -97,68 +98,8 @@ struct Graph {
             // zapisz odległość jaką mają pokonać mrówki na niższym poziomie
 
             if(qs>0 && g[que[qs-1]].d < g[que[qs]].d  ){
-
-                sort(ants.begin(), ants.end());
-
-                for(auto ant = ants.begin(); ant!=ants.end(); ant++){
-
-                    // zapisz przebytą odległość na ścieżce
-
-                    int ve_on_path = m[*ant].v;
-                    int path_distance = 0;
-
-                    while(ve_on_path!=-1){
-
-
-                        if(path_distance == shortest_distance){
-
-                            if(m_idx_first == -1){
-
-                                m_idx_first = *ant;
-
-                                m[m_idx_first].c++;
-
-                                path_distance = shortest_distance;
-
-                                break;
-
-                            }
-
-                            path_distance = shortest_distance-1;
-
-                            break;
-
-                        }
-
-
-                        // jeśli wierzchołek jest odwiedzony przez mrówkę we wcześniejszym czasie i ścieżka nie została skrócona
-                        // ścieżki są skracane o dystans mrówki która dotarła tam wcześniej
-
-                        if(g[ve_on_path].path_distance != -1 && m[g[ve_on_path].m_on_path].mov >= g[ve_on_path].path_distance ){
-
-                            // skróć ściężkę o dystans mrówki która dotarła tam wcześniej
-
-                            path_distance = g[ve_on_path].path_distance - 1;
-
-                            break;
-
-                        }
-
-                        g[ve_on_path].path_distance = path_distance;
-                        g[ve_on_path].m_on_path = *ant;
-
-                        path_distance++;
-                        ve_on_path = g[ve_on_path].p;
-                    }
-
-                    if(ve_on_path==-1)
-                        path_distance--;
-
-                    m[*ant].mov = path_distance;
-
-                }
-
-                ants.clear();
+				
+				SaveAntMoves(shortest_distance, m_idx_first);
 
             }
 
@@ -197,8 +138,87 @@ struct Graph {
             qs++;
 
         }
+		
+		// jeśli w buforze są mrówki których dystans nie został ustalony to oblicz ich dystans
+		// będą to mrówki położone na najdalszych wierzchołkach
+		
+		SaveAntMoves(shortest_distance, m_idx_first);
 
     }
+	
+	void SaveAntMoves(int shortest_distance, int &m_idx_first){
+
+		sort(ants.begin(), ants.end());
+
+		for(auto ant = ants.begin(); ant!=ants.end(); ant++){
+
+			// zapisz przebytą odległość na ścieżce
+
+			int ve_on_path = m[*ant].v;
+			int path_distance = 0;
+
+			while(ve_on_path!=-1){
+
+
+				if(path_distance == shortest_distance){
+
+					if(m_idx_first == -1){
+
+						m_idx_first = *ant;
+
+						m[m_idx_first].c++;
+
+						path_distance = shortest_distance;
+						
+						g[ve_on_path].path_distance = path_distance;
+						g[ve_on_path].m_on_path = *ant;
+
+						break;
+
+
+					}
+					
+					else{
+
+						path_distance = shortest_distance-1;
+						break;
+					}
+
+				}
+
+
+				// jeśli wierzchołek jest odwiedzony przez mrówkę we wcześniejszym czasie i ścieżka nie została skrócona
+				// ścieżki są skracane o dystans mrówki która dotarła tam wcześniej
+
+				if(g[ve_on_path].path_distance != -1 && m[g[ve_on_path].m_on_path].mov >= g[ve_on_path].path_distance ){
+
+					// skróć ściężkę o dystans mrówki która dotarła tam wcześniej
+
+					path_distance = g[ve_on_path].path_distance;
+
+					break;
+
+				}
+
+				g[ve_on_path].path_distance = path_distance;
+				g[ve_on_path].m_on_path = *ant;
+
+				path_distance++;
+				ve_on_path = g[ve_on_path].p;
+			
+			}
+			
+			// dotarcie do korzenia - 
+			if(ve_on_path==-1)
+				path_distance--;
+
+			m[*ant].mov = path_distance;
+
+		}
+
+		ants.clear();
+		
+	}
 
     void AntMoves(){
 
@@ -265,6 +285,7 @@ struct Graph {
 	}
 
 };
+
 
 int main(){
 
