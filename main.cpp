@@ -99,7 +99,7 @@ struct Graph {
 
             if(qs>0 && g[que[qs-1]].d < g[que[qs]].d  ){
 				
-				SaveAntMoves(shortest_distance, m_idx_first);
+				SaveAntMoves(shortest_distance, m_idx_first, g[que[qs-1]].d);
 
             }
 
@@ -142,11 +142,11 @@ struct Graph {
 		// jeśli w buforze są mrówki których dystans nie został ustalony to oblicz ich dystans
 		// będą to mrówki położone na najdalszych wierzchołkach
 		
-		SaveAntMoves(shortest_distance, m_idx_first);
+		SaveAntMoves(shortest_distance, m_idx_first, g[que[qs-1]].d);
 
     }
 	
-	void SaveAntMoves(int shortest_distance, int &m_idx_first){
+	void SaveAntMoves(int shortest_distance, int &m_idx_first, int distance){
 
 		sort(ants.begin(), ants.end());
 
@@ -179,8 +179,8 @@ struct Graph {
 					}
 					
 					else{
-
-						path_distance = shortest_distance-1;
+						// skróć dystans o jeden dla mrówek na tym samym dystansie co mrówka na najkrótszym dystansie
+						path_distance = shortest_distance  - ((distance>shortest_distance) ? 0 : 1);
 						break;
 					}
 
