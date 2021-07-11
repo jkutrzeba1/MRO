@@ -180,21 +180,28 @@ struct Graph {
 					
 					else{
 						// skróć dystans o jeden dla mrówek na tym samym dystansie co mrówka na najkrótszym dystansie
-						path_distance = shortest_distance  - ((distance>shortest_distance) ? 0 : 1);
-						break;
+						if(distance == shortest_distance){
+							path_distance = shortest_distance -1;
+							break;
+						}
 					}
 
 				}
 
 
 				// jeśli wierzchołek jest odwiedzony przez mrówkę we wcześniejszym czasie i ścieżka nie została skrócona
-				// ścieżki są skracane o dystans mrówki która dotarła tam wcześniej
 
 				if(g[ve_on_path].path_distance != -1 && m[g[ve_on_path].m_on_path].mov >= g[ve_on_path].path_distance ){
 
-					// skróć ściężkę o dystans mrówki która dotarła tam wcześniej
+					// przypisz dystans tego wierzchołka do dystansu jaki ma pokonać mrówka
 
 					path_distance = g[ve_on_path].path_distance;
+					
+					// jeśli odległość mrówek od miejsca lądowania biedronki jest taka sama, skróć ten dystans o 1.
+					
+					if(distance == g[m[g[ve_on_path].m_on_path].v].d){
+						path_distance--;
+					}
 
 					break;
 
