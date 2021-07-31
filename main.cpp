@@ -1,3 +1,9 @@
+
+/* 
+ *	Zadanie: https://szkopul.edu.pl/problemset/problem/C-0ax4ywj0aXQyZJysygVpXT/site/?key=statement
+ *	Autor: Jakub Kutrzeba
+ */
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -143,7 +149,7 @@ struct Graph {
 		// jeśli w buforze są mrówki których dystans nie został ustalony to oblicz ich dystans
 		// będą to mrówki położone na najdalszych wierzchołkach
 
-		SaveAntMoves(shortest_distance, m_idx_first, g[que[qs-1]].d);
+		SaveAntMoves(shortest_distance, m_idx_first, distance);
 
 	}
 
@@ -153,14 +159,14 @@ struct Graph {
 
 		for(auto ant = ants.begin(); ant!=ants.end(); ant++){
 
-			// zapisz przebytą odległość na ścieżce
+			// zapisz przebytą odległość na ścieżce
 
 			int ve_on_path = m[*ant].v;
 			int path_distance = 0;
 
 			while(ve_on_path!=-1){
 
-
+				// mrówka o najmniejszym indeksie (mrówki są posortowane według indeksów) odwiedza wierzchołek w którym wylądowała biedronka jako pierwsza.
 				if(path_distance == shortest_distance && m_idx_first == -1){
 
 					m_idx_first = *ant;
@@ -176,7 +182,6 @@ struct Graph {
 
 				}
 
-
 				// jeśli wierzchołek jest odwiedzony przez mrówkę we wcześniejszym czasie i ścieżka nie została skrócona
 
 				if(g[ve_on_path].path_distance != -1 && m[g[ve_on_path].m_on_path].mov >= g[ve_on_path].path_distance ){
@@ -190,31 +195,33 @@ struct Graph {
 					if(distance == g[m[g[ve_on_path].m_on_path].v].d){
 						path_distance--;
 					}
-
+					
 					break;
 
 				}
-
-				if(path_distance == shortest_distance){
-
-					path_distance = shortest_distance;
-
-					g[ve_on_path].path_distance = path_distance;
-					g[ve_on_path].m_on_path = *ant;
-
-					break;
-
-				}
-
+				
+				//zapisz odwiedziny mrówki na wierzchołku
 				g[ve_on_path].path_distance = path_distance;
 				g[ve_on_path].m_on_path = *ant;
-
+				
+				/*
+				// jeśli mrówka pokona taki sam dystans co mrówka która odgoniła biedronkę, i nienapotkała wierzchołka na ścieżce innej mrówki
+				// *mrówka może pokonać taki dystans, a później odwiedzić wierzchołek który jest odwiedzony przez inną mrówkę na mniejszym dystansie
+				if(path_distance == shortest_distance){
+					// zakończ wędrówkę mrówki
+					break;
+					
+				}
+				*/ 
+				
+				
+				// kontynuuj wędrówkę mrówki - przejdź do rodzica w BFS i zwiększ dystans
 				path_distance++;
 				ve_on_path = g[ve_on_path].p;
 
 			}
 
-			// dotarcie do korzenia -
+			// dotarcie do korzenia
 			if(ve_on_path==-1)
 				path_distance--;
 
@@ -293,10 +300,13 @@ struct Graph {
 };
 
 int main(){
+	
+	//freopen("mro3.in", "r", stdin);
 
 	int n; // liczba liści i rozgałęzień ponumerowanych od 1 do n
+	
 	cin>>n;
-
+	
 	Graph g(n);
 
 	for(int x = 1; x<n; x++){
@@ -308,6 +318,7 @@ int main(){
 
 	int k; //liczba mrówek patrolujących drzewo ponumerowane od 1 do k
 	cin>>k;
+	
 	for(int x = 1; x<=k; x++){
 		int v; //numer wierzchołka gdzie znajduje się mrówka
 		cin>>v;
@@ -324,8 +335,9 @@ int main(){
 		cin>>n;
 
 		g.Bfs(--n);
+		
 		g.AntMoves();
-		g.ClearBfsMeta();
+		g.ClearBfsMeta(); // zacieranie śladów
 
 	}
 
